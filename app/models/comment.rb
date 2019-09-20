@@ -12,4 +12,8 @@
 
 class Comment < ApplicationRecord
   belongs_to :user
+  has_one :sentiment
+
+  validates :text, presence: true
+  validates :commented_at, presence: true
 end

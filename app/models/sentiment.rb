@@ -3,7 +3,7 @@
 # Table name: sentiments
 #
 #  id             :bigint(8)        not null, primary key
-#  value          :text
+#  level          :text
 #  mixed_score    :float
 #  negative_score :float
 #  neutral_score  :float
@@ -17,4 +17,13 @@
 class Sentiment < ApplicationRecord
   belongs_to :comment
   belongs_to :user
+
+  enum level: {
+    mixed: 'mixed',
+    negative: 'negative',
+    neutral: 'neutral',
+    positive: 'positive',
+  }
+
+  validates :level, presence: true
 end

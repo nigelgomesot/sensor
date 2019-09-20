@@ -1,7 +1,7 @@
 class CreateSentiments < ActiveRecord::Migration[5.2]
   def change
     create_table :sentiments do |t|
-      t.text :value
+      t.text :level
       t.float :mixed_score
       t.float :negative_score
       t.float :neutral_score
@@ -11,6 +11,6 @@ class CreateSentiments < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
-    add_index :sentiments, :value
+    add_index :sentiments, :level
   end
 end

@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2019_09_20_163108) do
   end
 
   create_table "sentiments", force: :cascade do |t|
-    t.text "value"
+    t.text "level"
     t.float "mixed_score"
     t.float "negative_score"
     t.float "neutral_score"
@@ -35,16 +35,16 @@ ActiveRecord::Schema.define(version: 2019_09_20_163108) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["comment_id"], name: "index_sentiments_on_comment_id"
+    t.index ["level"], name: "index_sentiments_on_level"
     t.index ["user_id"], name: "index_sentiments_on_user_id"
-    t.index ["value"], name: "index_sentiments_on_value"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "code"
     t.string "provider"
+    t.string "provider_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_users_on_code"
+    t.index ["provider_user_id"], name: "index_users_on_provider_user_id"
   end
 
   add_foreign_key "comments", "users"

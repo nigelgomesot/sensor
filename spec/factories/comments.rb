@@ -12,8 +12,8 @@
 
 FactoryBot.define do
   factory :comment do
-    text { "MyText" }
-    commented_at { "2019-09-20 11:10:40" }
-    user { nil }
+    text { "Have a nice day!" }
+    commented_at { Time.current }
+    user
   end
 end

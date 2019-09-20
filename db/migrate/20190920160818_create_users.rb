@@ -1,11 +1,11 @@
 class CreateUsers < ActiveRecord::Migration[5.2]
   def change
     create_table :users do |t|
-      t.string :code
       t.string :provider
+      t.string :provider_user_id
 
       t.timestamps
     end
-    add_index :users, :code
+    add_index :users, :provider_user_id
   end
 end
