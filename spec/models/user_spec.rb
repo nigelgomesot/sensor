@@ -14,45 +14,44 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
 
   describe 'validations' do
-    it 'validates `provider` is present' do
-      user = User.new
+    it 'validates factory bot' do
+      user = FactoryBot.build :user
 
+      expect(user.valid?).to be_truthy
+    end
+
+    it 'validates `provider` is present' do
+      user = FactoryBot.build :user
+
+      user.provider = nil
       expect(user.valid?).to be_falsey
       expect(user.errors[:provider]).to include("can't be blank")
+    end
 
-      user.provider = 'provider'
-      user.valid?
+    it 'allows only specific providers' do
+      user = FactoryBot.build :user
 
-      expect(user.errors[:provider]).to be_empty
+      expect do
+        user.provider = 'invalid'
+      end.to raise_error(ArgumentError, /is not a valid provider/)
     end
 
     it 'validates `provider_user_id` is present' do
-      user = User.new(provider: 'provider')
+      user = FactoryBot.build :user
 
+      user.provider_user_id = nil
       expect(user.valid?).to be_falsey
       expect(user.errors[:provider_user_id]).to include("can't be blank")
-
-      user.provider_user_id = 'provider_user_id'
-      user.valid?
-
-      expect(user.errors[:provider_user_id]).to be_empty
     end
 
     it 'validates `provider_user_id` is unique per provider' do
       another_user = FactoryBot.create :user
 
-      user = User.new
-      user.provider = another_user.provider
+      user = FactoryBot.build :user
       user.provider_user_id = another_user.provider_user_id
 
       expect(user.valid?).to be_falsey
       expect(user.errors[:provider_user_id]).to include("has already been taken")
-
-      user = User.new
-      user.provider = 'provider'
-      user.provider_user_id = another_user.provider_user_id
-
-      expect(user.valid?).to be_truthy
     end
   end
 

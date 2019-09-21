@@ -15,28 +15,26 @@ require 'rails_helper'
 RSpec.describe Comment, type: :model do
 
  describe 'validations' do
-    it 'validates `text` is present' do
-      comment = Comment.new
+    it 'validates factory bot' do
+      comment = FactoryBot.build :comment
 
+      expect(comment.valid?).to be_truthy
+    end
+
+    it 'validates `text` is present' do
+      comment = FactoryBot.build :comment
+
+      comment.text = nil
       expect(comment.valid?).to be_falsey
       expect(comment.errors[:text]).to include("can't be blank")
-
-      comment.text = 'text'
-      comment.valid?
-
-      expect(comment.errors[:text]).to be_empty
     end
 
     it 'validates `commented_at` is present' do
-      comment = Comment.new(text: 'text')
+      comment = FactoryBot.build :comment
 
+      comment.commented_at = nil
       expect(comment.valid?).to be_falsey
       expect(comment.errors[:commented_at]).to include("can't be blank")
-
-      comment.commented_at = Time.current
-      comment.valid?
-
-      expect(comment.errors[:commented_at]).to be_empty
     end
   end
 

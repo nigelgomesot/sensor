@@ -19,25 +19,26 @@ require 'rails_helper'
 RSpec.describe Sentiment, type: :model do
 
   describe 'validations' do
-    it 'validates `level` is present' do
-      sentiment = Sentiment.new
+    it 'validates factory bot' do
+      sentiment = FactoryBot.build :sentiment
 
+      expect(sentiment.valid?).to be_truthy
+    end
+
+    it 'validates `level` is present' do
+      sentiment = FactoryBot.build :sentiment
+
+      sentiment.level = nil
       expect(sentiment.valid?).to be_falsey
       expect(sentiment.errors[:level]).to include("can't be blank")
-
-      sentiment.level = 'positive'
-      sentiment.valid?
-
-      expect(sentiment.errors[:level]).to be_empty
     end
 
     it 'allows only specific levels' do
-      sentiment = Sentiment.new
+      sentiment = FactoryBot.build :sentiment
 
       expect do
         sentiment.level = 'invalid'
       end.to raise_error(ArgumentError, /is not a valid level/)
-
     end
   end
 

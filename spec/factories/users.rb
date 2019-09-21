@@ -11,7 +11,7 @@
 
 FactoryBot.define do
   factory :user do
-    provider { FFaker::Internet.domain_name }
+    provider { 'slack' }
     provider_user_id { FFaker::Guid.guid }
   end
 end
