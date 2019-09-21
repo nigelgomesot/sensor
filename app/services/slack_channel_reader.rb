@@ -1,27 +1,32 @@
 class SlackChannelReader
 	 SLACK_CHANNEL = 'CNGCN4PC0'
 
-  def self.call(from_datetime = nil, upto_datetime = nil)
-    messages = fetch_messages(from_datetime, upto_datetime)
-
-    create_messages(messages)
+  def initialize(from_datetime = nil, upto_datetime = nil)
+    @oldest_timestamp = (from_datetime || Time.current.beginning_of_day).to_i
+    @latest_timestamp = (upto_datetime || Time.current.end_of_day).to_i
+    @messages = []
   end
 
-  def self.fetch_messages(from_datetime, upto_datetime)
-    from_timestamp = (from_datetime || Time.current.beginning_of_day).to_i
-    upto_timestamp = (upto_datetime || Time.current.end_of_day).to_i
-
-    reader = SlackUtils::GetConversationsHistory.new(
-      SLACK_CHANNEL,
-      from_timestamp,
-      upto_timestamp)
-
-    response = reader.call
-    response['messages']
+  def execute!
+    read_messages!
+    create_messages
   end
 
-  def self.create_messages(messages)
-    messages.each do |message|
+  def read_messages!
+    args = {
+      channel: SLACK_CHANNEL,
+      oldest_timestamp: @oldest_timestamp,
+      latest_timestamp: @latest_timestamp,
+    }
+
+    slack_client = SlackClient.new
+    response = slack_client.get_conversations_history(args)
+
+    @messages = JSON.parse(response.body)['messages']
+  end
+
+  def create_messages
+    @messages.each do |message|
       begin
         user = find_or_create_user!(message)
 
@@ -32,7 +37,7 @@ class SlackChannelReader
     end
   end
 
-  def self.find_or_create_user!(message_hash)
+  def find_or_create_user!(message_hash)
     provider_user_uid = message_hash['user']
 
     attributes = {
@@ -43,7 +48,7 @@ class SlackChannelReader
     User.find_or_create_by!(attributes)
   end
 
-  def self.find_or_create_user_message!(user, message_hash)
+  def find_or_create_user_message!(user, message_hash)
     text = message_hash['text']
     provider_message_uid = message_hash['client_msg_id']
     sent_at = Time.at(message_hash['ts'].to_f)
