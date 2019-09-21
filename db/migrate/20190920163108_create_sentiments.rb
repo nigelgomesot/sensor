@@ -6,7 +6,7 @@ class CreateSentiments < ActiveRecord::Migration[5.2]
       t.float :negative_score
       t.float :neutral_score
       t.float :positive_score
-      t.references :comment, foreign_key: true
+      t.references :message, foreign_key: true
       t.references :user, foreign_key: true
 
       t.timestamps

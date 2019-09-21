@@ -8,14 +8,14 @@
 #  negative_score :float
 #  neutral_score  :float
 #  positive_score :float
-#  comment_id     :bigint(8)
+#  message_id     :bigint(8)
 #  user_id        :bigint(8)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
 
 class Sentiment < ApplicationRecord
-  belongs_to :comment
+  belongs_to :message
   belongs_to :user
 
   enum level: {

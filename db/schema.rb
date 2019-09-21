@@ -15,13 +15,15 @@ ActiveRecord::Schema.define(version: 2019_09_20_163108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "comments", force: :cascade do |t|
+  create_table "messages", force: :cascade do |t|
     t.text "text"
-    t.datetime "commented_at"
+    t.string "provider_message_uid"
+    t.datetime "sent_at"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_comments_on_user_id"
+    t.index ["provider_message_uid"], name: "index_messages_on_provider_message_uid"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "sentiments", force: :cascade do |t|
@@ -30,24 +32,24 @@ ActiveRecord::Schema.define(version: 2019_09_20_163108) do
     t.float "negative_score"
     t.float "neutral_score"
     t.float "positive_score"
-    t.bigint "comment_id"
+    t.bigint "message_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["comment_id"], name: "index_sentiments_on_comment_id"
     t.index ["level"], name: "index_sentiments_on_level"
+    t.index ["message_id"], name: "index_sentiments_on_message_id"
     t.index ["user_id"], name: "index_sentiments_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "provider"
-    t.string "provider_user_id"
+    t.string "provider_user_uid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["provider_user_id"], name: "index_users_on_provider_user_id"
+    t.index ["provider_user_uid"], name: "index_users_on_provider_user_uid"
   end
 
-  add_foreign_key "comments", "users"
-  add_foreign_key "sentiments", "comments"
+  add_foreign_key "messages", "users"
+  add_foreign_key "sentiments", "messages"
   add_foreign_key "sentiments", "users"
 end

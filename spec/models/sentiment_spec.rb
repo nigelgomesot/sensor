@@ -8,7 +8,7 @@
 #  negative_score :float
 #  neutral_score  :float
 #  positive_score :float
-#  comment_id     :bigint(8)
+#  message_id     :bigint(8)
 #  user_id        :bigint(8)
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -49,8 +49,8 @@ RSpec.describe Sentiment, type: :model do
       expect(sentiment.user).to be_a(User)
     end
 
-    it 'belongs to a comment' do
-      expect(sentiment.comment).to be_a(Comment)
+    it 'belongs to a message' do
+      expect(sentiment.message).to be_a(Message)
     end
   end
 end

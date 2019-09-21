@@ -2,11 +2,11 @@
 #
 # Table name: users
 #
-#  id               :bigint(8)        not null, primary key
-#  provider_user_id :string
-#  provider         :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                :bigint(8)        not null, primary key
+#  provider          :string
+#  provider_user_uid :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 
 require 'rails_helper'
@@ -36,33 +36,33 @@ RSpec.describe User, type: :model do
       end.to raise_error(ArgumentError, /is not a valid provider/)
     end
 
-    it 'validates `provider_user_id` is present' do
+    it 'validates `provider_user_uid` is present' do
       user = FactoryBot.build :user
 
-      user.provider_user_id = nil
+      user.provider_user_uid = nil
       expect(user.valid?).to be_falsey
-      expect(user.errors[:provider_user_id]).to include("can't be blank")
+      expect(user.errors[:provider_user_uid]).to include("can't be blank")
     end
 
-    it 'validates `provider_user_id` is unique per provider' do
+    it 'validates `provider_user_uid` is unique per provider' do
       another_user = FactoryBot.create :user
 
       user = FactoryBot.build :user
-      user.provider_user_id = another_user.provider_user_id
+      user.provider_user_uid = another_user.provider_user_uid
 
       expect(user.valid?).to be_falsey
-      expect(user.errors[:provider_user_id]).to include("has already been taken")
+      expect(user.errors[:provider_user_uid]).to include("has already been taken")
     end
   end
 
   describe 'associations' do
     let(:user) { FactoryBot.create :user }
 
-    it 'has many comments' do
-      comment1 = FactoryBot.create :comment, user: user
-      comment2 = FactoryBot.create :comment, user: user
+    it 'has many messages' do
+      message1 = FactoryBot.create :message, user: user
+      message2 = FactoryBot.create :message, user: user
 
-      expect(user.reload.comments).to match_array([comment1, comment2])
+      expect(user.reload.messages).to match_array([message1, message2])
     end
 
     it 'has many sentiments' do
