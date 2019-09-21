@@ -24,7 +24,7 @@ class SlackChannelReader
     messages.each do |message|
       begin
         user = find_or_create_user!(message)
-        
+
         find_or_create_user_message!(user, message)
       rescue => err
         Rails.logger.error("SlackChannelReader error: #{err.message}, message: #{message}")
