@@ -32,7 +32,7 @@ class SlackChannelReader
 
       parsed_body = JSON.parse(response.body)
 
-      if !parsed_body['ok']
+      if !(parsed_body['ok'] && parsed_body['ok'] == true)
         raise 'invalid response body'
       end
 

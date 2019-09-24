@@ -45,7 +45,8 @@ RSpec.describe SlackChannelReader, type: :service do
 
     context 'when slack api returns error status' do
       it 'raises an error' do
-        stub_request(:get, /slack.com/).to_return(status: 400, body: '')
+        stub_request(:get, /slack.com/)
+          .to_return(status: 400)
 
         expect do
           reader.execute!
@@ -54,47 +55,98 @@ RSpec.describe SlackChannelReader, type: :service do
       end
     end
 
-    xcontext 'when slack api returns error body' do
+    context 'when slack api returns error body' do
       it 'raises an error' do
-        stub_request(:get, /slack.com/).to_return(status: 400, body: '')
+        stub_request(:get, /slack.com/)
+          .to_return(
+            status: 200,
+            body: {
+              "ok"=> false
+              }.to_json
+          )
 
         expect do
           reader.execute!
-        end.to raise_error(/invalid response body/)
+        end.to raise_error(StandardError, /invalid response body/)
           .and change { Message.count }.by(0)
       end
     end
 
     describe 'creating users' do
-      context 'when new user' do
+      it 'creates an user for new `provider_user_uid`' do
+        stub_slack_request(slack_message)
 
-        it 'creates an user' do
-        end
+        expect do
+          reader.execute!
+        end.to change { User.count }.from(0).to(1)
+
+        expected_provider_user_uid = slack_message['user']
+        expect(User.last.provider_user_uid).to eq(expected_provider_user_uid)
       end
 
-      context 'when existing user' do
+      context 'when `provider_user_uid` exist' do
+        before(:each) do
+          another_user = FactoryBot.create :user, provider_user_uid: slack_message['user']
+        end
 
         it 'does not create an user' do
+          stub_slack_request(slack_message)
+
+          expect do
+            reader.execute!
+          end.not_to change { User.count }
+
+          expected_provider_user_uid = slack_message['user']
+          expect(User.last.provider_user_uid).to eq(expected_provider_user_uid)
         end
       end
     end
 
     describe 'creating messages' do
-      context 'when new message' do
+      it 'creates a message for new `provider_message_uid`' do
+        stub_slack_request(slack_message)
 
-        it 'creates a message' do
-        end
+        expect do
+          reader.execute!
+        end.to change { Message.count }.from(0).to(1)
+
+        expected_provider_message_uid = slack_message['client_msg_id']
+        expect(Message.last.provider_message_uid).to eq(expected_provider_message_uid)
       end
 
-      context 'when existing message' do
+      context 'when `provider_message_uid` exist' do
+        let(:user) { FactoryBot.create(:user, provider_user_uid: slack_message['user'])}
+
+        before(:each) do
+          another_message = FactoryBot.create(:message,
+            user: user,
+            provider_message_uid: slack_message['client_msg_id'],
+          )
+        end
 
         it 'does not create message' do
+          stub_slack_request(slack_message)
+
+          expect do
+            reader.execute!
+          end.not_to change { Message.count }
+
+          expected_provider_message_uid = slack_message['client_msg_id']
+          expect(Message.last.provider_message_uid).to eq(expected_provider_message_uid)
         end
       end
 
       context 'when `client_msg_id` is missing' do
+        before(:each) do
+          slack_message['client_msg_id'] = nil
+        end
 
         it 'does not create message' do
+          stub_slack_request(slack_message)
+
+          expect do
+            reader.execute!
+          end.not_to change { Message.count }
         end
       end
     end
