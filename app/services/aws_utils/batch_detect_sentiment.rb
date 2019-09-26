@@ -1,5 +1,6 @@
 module AwsUtils
 class BatchDetectSentiment
+    attr_reader :text_list
 
     def initialize(text_list)
       @text_list = text_list
