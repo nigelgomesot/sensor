@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SlackChannelReader, type: :service do
+RSpec.describe SlackImporter, type: :service do
   let(:channel_id) { '123' }
 
   describe '#initialize' do
@@ -9,7 +9,7 @@ RSpec.describe SlackChannelReader, type: :service do
       from_datetime = (Time.current - 1.day).beginning_of_day
       upto_datetime = (Time.current - 1.day).end_of_day
 
-      reader = SlackChannelReader.new(channel_id, from_datetime: from_datetime, upto_datetime: upto_datetime)
+      reader = SlackImporter.new(channel_id, from_datetime: from_datetime, upto_datetime: upto_datetime)
 
       expected_channel = channel_id
       expect(reader.channel).to eq(expected_channel)
@@ -23,7 +23,7 @@ RSpec.describe SlackChannelReader, type: :service do
   end
 
   describe '#execute' do
-    let(:reader) { SlackChannelReader.new(channel_id) }
+    let(:reader) { SlackImporter.new(channel_id) }
     let(:slack_message) do
       {
         "client_msg_id"=>"a01a9164-2f21-4670-9e41-44be821a875b",
@@ -35,7 +35,7 @@ RSpec.describe SlackChannelReader, type: :service do
       }
     end
 
-    it 'stores slack messages' do
+    it 'imports slack messages' do
       stub_slack_request(slack_message)
 
       expect do

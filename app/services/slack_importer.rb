@@ -1,4 +1,4 @@
-class SlackChannelReader
+class SlackImporter
 
   attr_reader :channel, :oldest_timestamp, :latest_timestamp
 
@@ -23,7 +23,7 @@ class SlackChannelReader
         latest_timestamp: @latest_timestamp,
       }
 
-      slack_client = SlackClient.new
+      slack_client = Clients::Slack.new
       response = slack_client.get_conversations_history(args)
 
       if response.code != 200
@@ -46,7 +46,7 @@ class SlackChannelReader
 
           find_or_create_user_message!(user, message)
         rescue => err
-          Rails.logger.error("SlackChannelReader error: #{err.message}, message: #{message}")
+          Rails.logger.error("SlackImporter error: #{err.message}, message: #{message}")
         end
       end
     end

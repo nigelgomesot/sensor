@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SlackChannelReaderJob, type: :job do
+RSpec.describe SlackImporterJob, type: :job do
   let(:channel) { '123' }
   let(:slack_response_status) { 200 }
   let(:slack_response_body) do
@@ -29,7 +29,7 @@ RSpec.describe SlackChannelReaderJob, type: :job do
 
   it 'executes the job' do
     expect do
-      SlackChannelReaderJob.perform_now(channel)
+      SlackImporterJob.perform_now(channel)
     end.to change { User.count }.from(0).to(1)
       .and change { Message.count }.from(0).to(1)
   end
@@ -39,7 +39,7 @@ RSpec.describe SlackChannelReaderJob, type: :job do
 
     it 'raises RuntimeError and aborts the job' do
       expect do
-        SlackChannelReaderJob.perform_now(channel)
+        SlackImporterJob.perform_now(channel)
       end.to raise_error(RuntimeError, /invalid response status/)
         .and change { User.count }.by(0)
         .and change { Message.count }.by(0)
