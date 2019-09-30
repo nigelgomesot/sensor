@@ -10,8 +10,8 @@ module Clients
       raise StandardError.new('text_list is empty') if text_list.empty?
 
       response = @service.batch_detect_sentiment({
+          text_list: text_list,
           language_code: "en",
-          text_list: text_list
         })
 
       response
