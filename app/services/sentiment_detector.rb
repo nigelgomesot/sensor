@@ -2,8 +2,8 @@ class SentimentDetector
   def initialize(from_datetime: nil, upto_datetime: nil)
     @from_datetime = from_datetime || Time.current.beginning_of_day
     @upto_datetime = upto_datetime || Time.current
-    @messages = []
-    @sentiments = []
+    @messages = set_messages
+    @aws_client = set_aws_client
   end
 
   def execute!
@@ -13,15 +13,12 @@ class SentimentDetector
   private
 
     def get_sentiments!
-      messages = get_messages
-      aws_client = get_aws_client
-
-      messages.find_in_batches(batch_size: 25) do |message_batch|
+      @messages.find_in_batches(batch_size: 25) do |message_batch|
         # TODO: fetch sentiments and map to messages in the `batch`
         message_array = message_batch.pluck(:id, :text)
         text_list = message_array.collect { |_, text| text }
 
-        response = aws_client.batch_detect_sentiment(text_list)
+        response = @aws_client.batch_detect_sentiment(text_list)
 
         if response['error_list'].present?
           response['error_list'].each do |error|
@@ -35,43 +32,47 @@ class SentimentDetector
           raise "AWS error"
         end
 
-        sentiment_list = response['result_list']
-        if sentiment_list && sentiment_list.empty?
+        sentiments = response['result_list']
+        if sentiments && sentiments.empty?
           message = "result is empty"
           Rails.logger.error(message)
           raise message
         end
+        create_sentiments!(sentiments, message_batch)
+      end
+    end
 
-        sentiment_list.each do |sentiment|
-          message = message_batch[(sentiment['index'])]
-          sentiment_details = sentiment
+    def create_sentiments!(sentiments, message_batch)
+      sentiments.each do |sentiment|
+        message = message_batch[(sentiment['index'])]
+        sentiment_details = sentiment
 
-          Sentiment.create! do |s|
-            s.message = message
-            s.user = message.user
-            s.level = sentiment_details['sentiment'].downcase
-            s.mixed_score = sentiment_details['sentiment_score']['mixed']
-            s.negative_score = sentiment_details['sentiment_score']['negative']
-            s.neutral_score = sentiment_details['sentiment_score']['neutral']
-            s.positive_score = sentiment_details['sentiment_score']['positive']
-          end
+        Sentiment.create! do |s|
+          s.message = message
+          s.user = message.user
+          s.level = sentiment_details['sentiment'].downcase
+          s.mixed_score = sentiment_details['sentiment_score']['mixed']
+          s.negative_score = sentiment_details['sentiment_score']['negative']
+          s.neutral_score = sentiment_details['sentiment_score']['neutral']
+          s.positive_score = sentiment_details['sentiment_score']['positive']
         end
       end
     end
 
-    def create_sentiments!
-      # TODO:
-    end
-
-    def get_messages
+    def set_messages
       # TODO: fetch where sentiment is nil
-      Message.all
+      @messages = Message.all
         .where('created_at >= ?', @from_datetime)
         .where('created_at <= ?', @upto_datetime)
     end
 
-    def get_aws_client
+    def set_aws_client
       comprehend_client = Aws::Comprehend::Client.new
       Clients::Aws.new(comprehend_client)
     end
 end
+
+__END__
+
+sd = SentimentDetector.new(from_datetime: Time.current - 1.year)
+sd.execute!
