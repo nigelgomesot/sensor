@@ -1,5 +1,5 @@
 class SentimentDetector
-  attr_reader :messages
+  attr_reader :messages, :sentiments, :aws_client
 
   def initialize(messages)
     @messages = messages
