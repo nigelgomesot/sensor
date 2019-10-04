@@ -1,4 +1,6 @@
 class SentimentDetector
+  MESSAGES_MAX_LENGTH = 25
+
   attr_reader :messages, :sentiments, :aws_client
 
   def initialize(messages)
@@ -15,8 +17,8 @@ class SentimentDetector
   private
 
     def detect_sentiments!
-      if messages.empty? || messages.length > 25
-        error_message = 'only 25 messages allowed'
+      if messages.empty? || messages.length > MESSAGES_MAX_LENGTH
+        error_message = "number of messages expected: 1 to #{MESSAGES_MAX_LENGTH}"
         Rails.logger.fatal(error_message)
 
         raise error_message
