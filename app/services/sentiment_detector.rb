@@ -25,16 +25,16 @@ class SentimentDetector
       end
 
       text_list = messages.map(&:text)
-      response = @aws_client.batch_detect_sentiment(text_list)
+      response = aws_client.batch_detect_sentiment(text_list)
 
       if response['error_list'].present?
         response['error_list'].each do |error|
           message = @messages[(error['index'])]
           message_id = message.id
           code = error['error_code']
-          message = ['error_message']
-          error_message = "message_id: #{message_id} code: #{code}, message: #{message}"
-          Rails.logger.fatal(error_message)
+          message = error['error_message']
+          error_message = "detect sentiment error for message_id: #{message_id}, code: #{code}, message: #{message}"
+          Rails.logger.error(error_message)
         end
 
         raise "AWS error"

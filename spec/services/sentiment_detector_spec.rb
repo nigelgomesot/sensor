@@ -55,7 +55,7 @@ RSpec.describe SentimentDetector, type: :service do
       end
 
       it 'raises an error for AWS error response' do
-        error = StandardError.new('AWS SDK error')
+        error = RuntimeError.new('AWS error')
         service_stub.stub_responses(
           :batch_detect_sentiment,
           error,
@@ -63,7 +63,69 @@ RSpec.describe SentimentDetector, type: :service do
 
         expect do
           detector.execute!
-        end.to raise_error(RuntimeError, /AWS SDK error/)
+        end.to raise_error(RuntimeError, /AWS error/)
+      end
+
+      it 'raises an error for AWS response with error list' do
+        response_body = {
+          :error_list=>[
+            {
+              :index => 0,
+              :error_code => 'error_code',
+              :error_message => 'error_message',
+            }
+          ],
+          :result_list=>[]
+        }
+
+        service_stub.stub_responses(
+          :batch_detect_sentiment,
+          response_body,
+        )
+
+        expected_error_log = "detect sentiment error for message_id: #{message.id}, code: error_code, message: error_message"
+        expect(Rails.logger).to receive(:error)
+          .with(expected_error_log).and_call_original
+
+        expect do
+          detector.execute!
+        end.to raise_error(StandardError, /AWS error/)
+      end
+
+      it 'creates sentiment for messages' do
+        response_body = {
+          :result_list=>[
+            {
+              :index=>0,
+              :sentiment=>"POSITIVE",
+              :sentiment_score=>{
+                :positive=>0.98,
+                :negative=>0.0,
+                :neutral=>0.01,
+                :mixed=>1.51
+              }
+            }
+          ],
+          :error_list=>[]
+        }
+
+        service_stub.stub_responses(
+          :batch_detect_sentiment,
+          response_body,
+        )
+
+        expect do
+          detector.execute!
+        end.to change { Sentiment.count }.from(0).to(1)
+
+        sentiment = Sentiment.last
+        expect(sentiment.message).to eq(message)
+        expect(sentiment.user).to eq(message.user)
+        expect(sentiment.level).to eq('positive')
+        expect(sentiment.mixed_score).to eq(1.51)
+        expect(sentiment.negative_score).to eq(0.0)
+        expect(sentiment.neutral_score).to eq(0.01)
+        expect(sentiment.positive_score).to eq(0.98)
       end
     end
   end
