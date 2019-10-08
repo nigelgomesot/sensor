@@ -4,23 +4,24 @@ RSpec.describe SentimentDetector, type: :service do
   let(:message) { FactoryBot.create(:message) }
 
   describe '#initialize' do
-    let(:messages) { [] }
+    let(:message_ids) { [message.id] }
 
     it 'assigns attributes' do
-      detector = SentimentDetector.new(messages)
+      detector = SentimentDetector.new(message_ids)
 
-      expect(detector.messages).to match_array(messages)
+      expect(detector.message_ids).to match_array(message_ids)
+      expect(detector.messages).to be_empty
       expect(detector.sentiments).to be_empty
       expect(detector.aws_client).to be_an_instance_of(Clients::Aws)
     end
   end
 
   describe '#execute!' do
-    let(:detector) { SentimentDetector.new(messages) }
+    let(:detector) { SentimentDetector.new(message_ids) }
 
     context 'with messages length' do
       context 'when messages are empty' do
-        let(:messages) { [] }
+        let(:message_ids) { [] }
 
         it 'raises an error' do
           expect do
@@ -30,7 +31,7 @@ RSpec.describe SentimentDetector, type: :service do
       end
 
       context 'when messages length > MESSAGES_MAX_LENGTH' do
-        let(:messages) { [message] }
+        let(:message_ids) { [message.id] }
 
         it 'raises an error' do
           stub_const("#{SentimentDetector}::MESSAGES_MAX_LENGTH", 0)
@@ -43,7 +44,7 @@ RSpec.describe SentimentDetector, type: :service do
     end
 
     context 'AWS responses' do
-      let(:messages) { [message] }
+      let(:message_ids) { [message.id] }
       let(:service_stub) do
         Aws::Comprehend::Client.new(stub_responses: true)
       end

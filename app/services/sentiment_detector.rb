@@ -1,10 +1,11 @@
 class SentimentDetector
   MESSAGES_MAX_LENGTH = 25
 
-  attr_reader :messages, :sentiments, :aws_client
+  attr_reader :message_ids, :messages, :sentiments, :aws_client
 
-  def initialize(messages)
-    @messages = messages
+  def initialize(message_ids)
+    @message_ids = message_ids
+    @messages = []
     @sentiments = []
     set_aws_client
   end
@@ -17,12 +18,14 @@ class SentimentDetector
   private
 
     def detect_sentiments!
-      if messages.empty? || messages.length > MESSAGES_MAX_LENGTH
+      if message_ids.empty? || message_ids.length > MESSAGES_MAX_LENGTH
         error_message = "number of messages expected: 1 to #{MESSAGES_MAX_LENGTH}"
         Rails.logger.fatal(error_message)
 
         raise error_message
       end
+
+      @messages = Message.where(id: @message_ids)
 
       text_list = messages.map(&:text)
       response = aws_client.batch_detect_sentiment(text_list)
@@ -82,5 +85,5 @@ end
 
 __END__
 
-sd = SentimentDetector.new(Message.all)
+sd = SentimentDetector.new(Message.all.pluck(:id))
 sd.execute!

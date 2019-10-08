@@ -16,7 +16,8 @@ ActiveAdmin.register Message do
   # end
 
   collection_action :import, method: :post do
-    SlackImporterJob.perform_now('CNGCN4PC0', from_datetime: Time.current.beginning_of_day)
+    from_datetime = Time.current.beginning_of_day - 50.day
+    SlackImporterJob.perform_now('CNGCN4PC0', from_datetime: from_datetime)
 
     redirect_to collection_path, notice: "Messages import started successfully!"
   end
