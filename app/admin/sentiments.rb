@@ -14,17 +14,33 @@ ActiveAdmin.register Sentiment do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
-  collection_action :import, method: :post do
-    # TODO: idempotency
-    from_datetime = Time.current.beginning_of_day - 50.day
-    message_ids = Message.all.where("created_at >= ?", from_datetime).limit(25).pluck(:id)
-    SentimentDetectorJob.perform_now(message_ids)
 
-    redirect_to collection_path, notice: "Sentiments analysis started successfully!"
+  collection_action :new_analysis, method: :get do
+    render "new_analysis"
+  end
+
+  collection_action :create_analysis, method: :post do
+    analysis_params = params[:analysis]
+    from_datetime = analysis_params[:from_datetime]
+    upto_datetime = analysis_params[:upto_datetime]
+
+    message_ids = Message.all
+      .includes(:sentiment)
+      .where("messages.created_at >= ?", from_datetime)
+      .where("messages.created_at <= ?", upto_datetime)
+      .where("sentiments.id is NULL")
+      .limit(SentimentDetector::MESSAGES_MAX_LENGTH)
+      .pluck("messages.id")
+
+    begin
+      SentimentDetectorJob.perform_now(message_ids)
+      redirect_to collection_path, notice: "Message analysis started"
+    rescue => err
+      redirect_to collection_path, alert: "Message analysis failed: #{err.message}"
+    end
   end
 
   action_item :view, only: :index do
-    link_to 'Anaylze Sentiments', import_admin_sentiments_path, method: :post
+    link_to 'Analyze Messages', new_analysis_admin_sentiments_path
   end
 end
