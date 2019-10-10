@@ -23,6 +23,6 @@ ActiveAdmin.register Message do
   end
 
   action_item :view, only: :index do
-    link_to 'Import from Slack', import_admin_messages_path, method: :post
+    link_to 'Import from Slack', admin_slackimporter_new_path
   end
 end

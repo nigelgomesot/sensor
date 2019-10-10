@@ -1,0 +1,8 @@
+<%= semantic_form_for :slackimporter, url: admin_slackimporter_create_path, builder: ActiveAdmin::FormBuilder do |f| %>
+  <%= f.input :channel %>
+  <%= f.input :from_datetime, as: :datepicker,
+    datepicker_options: { min_date: 1.years.ago.to_date, max_date: Date.today } %>
+  <%= f.input :upto_datetime, as: :datepicker,
+    datepicker_options: { min_date: 1.years.ago.to_date, max_date: Date.today } %>
+  <%= f.actions %>
+<% end %>
