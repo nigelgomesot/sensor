@@ -15,14 +15,14 @@ ActiveAdmin.register Sentiment do
   #   permitted
   # end
 
-  collection_action :new_analysis, method: :get do
-    render "new_analysis"
+  collection_action :new_detection, method: :get do
+    render "new_detection"
   end
 
-  collection_action :create_analysis, method: :post do
-    analysis_params = params[:analysis]
-    from_datetime = analysis_params[:from_datetime]
-    upto_datetime = analysis_params[:upto_datetime]
+  collection_action :create_detection, method: :post do
+    detection_params = params[:detection]
+    from_datetime = detection_params[:from_datetime]
+    upto_datetime = detection_params[:upto_datetime]
 
     message_ids = Message.all
       .includes(:sentiment)
@@ -34,13 +34,13 @@ ActiveAdmin.register Sentiment do
 
     begin
       SentimentDetectorJob.perform_now(message_ids)
-      redirect_to collection_path, notice: "Message analysis started"
+      redirect_to collection_path, notice: "Sentiment detection started"
     rescue => err
-      redirect_to collection_path, alert: "Message analysis failed: #{err.message}"
+      redirect_to collection_path, alert: "Sentiment detection failed: #{err.message}"
     end
   end
 
   action_item :view, only: :index do
-    link_to 'Analyze Messages', new_analysis_admin_sentiments_path
+    link_to 'Detect Sentiments', new_detection_admin_sentiments_path
   end
 end
