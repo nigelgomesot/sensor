@@ -2,7 +2,7 @@ class SlackImporter
 
   attr_reader :channel, :oldest_timestamp, :latest_timestamp
 
-  def initialize(channel_id: nil, from_datetime: nil, upto_datetime: nil)
+  def initialize(channel_id:, from_datetime:, upto_datetime:)
     @channel = channel_id
     @oldest_timestamp = get_timestamp(from_datetime)
     @latest_timestamp = get_timestamp(upto_datetime)
@@ -18,7 +18,7 @@ class SlackImporter
 
     def get_timestamp(datetime_str)
       timestamp = Time.current.beginning_of_day.to_i
-      timestamp = DateTime.parse(datetime_str).to_i if datetime_str
+      timestamp = DateTime.parse(datetime_str).to_i if datetime_str.present?
 
       timestamp
     end

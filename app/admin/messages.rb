@@ -20,7 +20,12 @@ ActiveAdmin.register Message do
   end
 
   collection_action :create_import, method: :post do
-    SlackImporterJob.perform_now(params[:import].to_h)
+    import_params = {
+      channel_id: params[:import][:channel_id],
+      from_datetime: params[:import][:from_datetime],
+      upto_datetime: params[:import][:upto_datetime],
+    }
+    SlackImporterJob.perform_now(import_params)
 
     redirect_to collection_path, notice: "Messages import started successfully!"
   end

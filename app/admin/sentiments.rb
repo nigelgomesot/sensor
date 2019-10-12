@@ -20,14 +20,13 @@ ActiveAdmin.register Sentiment do
   end
 
   collection_action :create_detection, method: :post do
-    detection_params = params[:detection]
-    from_datetime = detection_params[:from_datetime]
-    upto_datetime = detection_params[:upto_datetime]
+    from_datetime = params[:detection][:from_datetime]
+    upto_datetime = params[:detection][:upto_datetime]
 
     message_ids = Message.all
       .includes(:sentiment)
-      .where("messages.created_at >= ?", from_datetime)
-      .where("messages.created_at <= ?", upto_datetime)
+      .where("messages.sent_at >= ?", from_datetime)
+      .where("messages.sent_at <= ?", upto_datetime)
       .where("sentiments.id is NULL")
       .limit(SentimentDetector::MESSAGES_MAX_LENGTH)
       .pluck("messages.id")
