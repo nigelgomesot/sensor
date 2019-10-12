@@ -16,7 +16,7 @@
 
 FactoryBot.define do
   factory :sentiment do
-    level { "positive" }
+    level { Sentiment.levels.keys.sample }
     message
     user
   end

@@ -15,13 +15,15 @@ ActiveAdmin.register Sentiment do
   #   permitted
   # end
 
+  actions :index, :show
+
   collection_action :new_detection, method: :get do
     render "new_detection"
   end
 
   collection_action :create_detection, method: :post do
-    from_datetime = params[:detection][:from_datetime]
-    upto_datetime = params[:detection][:upto_datetime]
+    from_datetime = params[:detection][:from_datetime] + " 00:00:00"
+    upto_datetime = params[:detection][:upto_datetime] + " 23:59:59"
 
     message_ids = Message.all
       .includes(:sentiment)
@@ -42,4 +44,40 @@ ActiveAdmin.register Sentiment do
   action_item :view, only: :index do
     link_to 'Detect Sentiments', new_detection_admin_sentiments_path
   end
+
+
+  index do
+    id_column
+    column :sent_at
+    column :level do |sentiment|
+      status_tag sentiment.level, { class: "level_#{sentiment.level}"}
+    end
+    column :text
+    actions
+  end
+
+  show do
+    attributes_table do
+      row :sent_at
+      row :level do |sentiment|
+        status_tag sentiment.level, { class: "level_#{sentiment.level}"}
+      end
+      row :text
+      row :positive_score
+      row :neutral_score
+      row :negative_score
+      row :mixed_score
+      row :user do |sentiment|
+        link_to 'User', admin_user_path(sentiment.user)
+      end
+    end
+  end
+
+  filter :level, as: :select, collection: Sentiment.levels
+  filter :positive_score
+  filter :neutral_score
+  filter :negative_score
+  filter :mixed_score
+  filter :message_sent_at, as: :date_range
+  filter :message_text, as: :string
 end

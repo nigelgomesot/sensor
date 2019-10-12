@@ -20,10 +20,13 @@ ActiveAdmin.register Message do
   end
 
   collection_action :create_import, method: :post do
+    from_datetime = params[:import][:from_datetime] + " 00:00:00"
+    upto_datetime = params[:import][:upto_datetime] + " 23:59:59"
+
     import_params = {
       channel_id: params[:import][:channel_id],
-      from_datetime: params[:import][:from_datetime],
-      upto_datetime: params[:import][:upto_datetime],
+      from_datetime: from_datetime,
+      upto_datetime: upto_datetime,
     }
     SlackImporterJob.perform_now(import_params)
 
