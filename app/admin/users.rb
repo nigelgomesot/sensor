@@ -14,4 +14,9 @@ ActiveAdmin.register User do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
+
+  actions :index, :show, :destroy
+
+  filter :provider, as: :select, collection: User.providers
+  filter :provider_user_uid
 end

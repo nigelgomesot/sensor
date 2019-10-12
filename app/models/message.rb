@@ -13,7 +13,8 @@
 
 class Message < ApplicationRecord
   belongs_to :user
-  has_one :sentiment
+  has_one :sentiment, dependent: :destroy
+  has_many :entities, dependent: :delete_all
 
   validates :text, presence: true
   validates :provider_message_uid, presence: true

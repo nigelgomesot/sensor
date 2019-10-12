@@ -10,4 +10,4 @@ end
 
 __END__
 
-SentimentDetectorJob.perform_now(from_datetime: Time.current - 50.day)
+SentimentDetectorJob.perform_now(Message.order(created_at: :desc).limit(1).pluck(:id))

@@ -10,8 +10,9 @@
 #
 
 class User < ApplicationRecord
-  has_many :messages
-  has_many :sentiments
+  has_many :messages, dependent: :delete_all
+  has_many :sentiments, dependent: :delete_all
+  has_many :entities, dependent: :delete_all
 
   enum provider: {
     slack: 'slack',
