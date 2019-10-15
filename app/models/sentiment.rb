@@ -19,11 +19,23 @@ class Sentiment < ApplicationRecord
   belongs_to :user
 
   enum level: {
-    mixed: 'mixed',
-    negative: 'negative',
-    neutral: 'neutral',
     positive: 'positive',
+    neutral: 'neutral',
+    negative: 'negative',
+    mixed: 'mixed',
   }
 
   validates :level, presence: true
+
+  delegate :text, to: :message
+  delegate :sent_at, to: :message
+
+  def status_tag
+    case self.level
+      when :positive then :ok
+      when :neutral then :warning
+      when :negative then :error
+      when :mixed then :warning
+    end
+  end
 end

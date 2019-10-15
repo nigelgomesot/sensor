@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe SlackClient, type: :service do
-  let(:slack_client) { SlackClient.new }
+RSpec.describe Clients::Slack, type: :service do
+  let(:slack_client) { Clients::Slack.new }
 
   describe '#get_conversations_history' do
     let(:args) do

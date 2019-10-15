@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe AwsClient, type: :service do
+RSpec.describe Clients::Aws, type: :service do
   let(:service_stub) do
     Aws::Comprehend::Client.new(stub_responses: true)
   end
 
   describe '#initialize' do
     it 'initializes with a specific AWS service' do
-      aws_client = AwsClient.new(service_stub)
+      aws_client = Clients::Aws.new(service_stub)
 
       expect(aws_client.service).to eq(service_stub)
     end
@@ -16,7 +16,7 @@ RSpec.describe AwsClient, type: :service do
   describe '#batch_detect_sentiment' do
     let(:text_list) { ['text'] }
     let(:aws_client) do
-      AwsClient.new(service_stub)
+      Clients::Aws.new(service_stub)
     end
 
     it 'fetches sentiment for a batch' do

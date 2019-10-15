@@ -13,7 +13,7 @@
 
 FactoryBot.define do
   factory :message do
-    text { "Have a nice day!" }
+    text { FFaker::Tweet.tweet }
     provider_message_uid { FFaker::Guid.guid }
     sent_at { Time.current }
     user

@@ -1,11 +1,11 @@
-class SlackChannelReader
+class SlackImporter
 
   attr_reader :channel, :oldest_timestamp, :latest_timestamp
 
-  def initialize(channel_id, from_datetime: nil, upto_datetime: nil)
+  def initialize(channel_id:, from_datetime:, upto_datetime:)
     @channel = channel_id
-    @oldest_timestamp = (from_datetime || Time.current.beginning_of_day).to_i
-    @latest_timestamp = (upto_datetime || Time.current.end_of_day).to_i
+    @oldest_timestamp = get_timestamp(from_datetime)
+    @latest_timestamp = get_timestamp(upto_datetime)
     @messages = []
   end
 
@@ -16,6 +16,13 @@ class SlackChannelReader
 
   private
 
+    def get_timestamp(datetime_str)
+      timestamp = Time.current.beginning_of_day.to_i
+      timestamp = DateTime.parse(datetime_str).to_i if datetime_str.present?
+
+      timestamp
+    end
+
     def read_messages!
       args = {
         channel:          @channel,
@@ -23,7 +30,7 @@ class SlackChannelReader
         latest_timestamp: @latest_timestamp,
       }
 
-      slack_client = SlackClient.new
+      slack_client = Clients::Slack.new
       response = slack_client.get_conversations_history(args)
 
       if response.code != 200
@@ -46,7 +53,7 @@ class SlackChannelReader
 
           find_or_create_user_message!(user, message)
         rescue => err
-          Rails.logger.error("SlackChannelReader error: #{err.message}, message: #{message}")
+          Rails.logger.error("SlackImporter error: #{err.message}, message: #{message}")
         end
       end
     end
