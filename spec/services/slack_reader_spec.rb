@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe SlackReader, type: :service do
   let(:args) do
     {
-      channel_id: 123,
+      channel_id: 'CNGCN4PC0',
       from_datetime: Time.current.beginning_of_day.iso8601,
       upto_datetime: Time.current.end_of_day.iso8601
     }
@@ -25,6 +25,18 @@ RSpec.describe SlackReader, type: :service do
       expect(slack_reader.slack_client).to be_an_instance_of(Slack::Web::Client)
 
       expect(slack_reader.messages).to be_empty
+    end
+  end
+
+  describe '#execute!' do
+    let(:slack_reader) { SlackReader.new(args) }
+
+    it 'returns conversations_history response' do
+      VCR.use_cassette('slack/conversations_history') do
+        slack_reader.execute!
+        message = slack_reader.messages.first
+        expect(message).to include('client_msg_id', 'type', 'text', 'user', 'ts')
+      end
     end
   end
 end
