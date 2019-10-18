@@ -38,5 +38,19 @@ RSpec.describe SlackReader, type: :service do
         expect(message).to include('client_msg_id', 'type', 'text', 'user', 'ts')
       end
     end
+
+    context 'when Slack returns errors' do
+      before(:each) do
+        args[:channel_id] = 'invalid'
+      end
+
+      it 'raises an error' do
+        expect do
+          VCR.use_cassette('slack/channel_not_found') do
+            slack_reader.execute!
+          end
+        end.to raise_error(Slack::Web::Api::Errors::SlackError, /channel_not_found/)
+      end
+    end
   end
 end
