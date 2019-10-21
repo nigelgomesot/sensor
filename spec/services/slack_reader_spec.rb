@@ -40,10 +40,6 @@ RSpec.describe SlackReader, type: :service do
     end
 
     context 'when Slack returns errors' do
-      before(:each) do
-        args[:channel_id] = 'invalid'
-      end
-
       it 'raises an error' do
         expect do
           VCR.use_cassette('slack/channel_not_found') do
