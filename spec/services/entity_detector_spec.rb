@@ -119,7 +119,7 @@ RSpec.describe EntityDetector, type: :service do
         }
 
         service_stub.stub_responses(
-          :batch_detect_entity,
+          :batch_detect_entities,
           response_body,
         )
 
@@ -131,14 +131,14 @@ RSpec.describe EntityDetector, type: :service do
         expect(entity1.message).to eq(message)
         expect(entity1.user).to eq(message.user)
         expect(entity1.text).to eq('April 23')
-        expect(entity1.score).to eq(0.9972403049468994)
+        expect(entity1.score).to be_within(0.001).of(0.9972403049468994)
 
         entity2 = Entity.find_by(category: 'location')
 
-        expect(entity1.message).to eq(message)
-        expect(entity1.user).to eq(message.user)
-        expect(entity1.text).to eq('Chicago')
-        expect(entity1.score).to eq(0.9716717004776001)
+        expect(entity2.message).to eq(message)
+        expect(entity2.user).to eq(message.user)
+        expect(entity2.text).to eq('Chicago')
+        expect(entity2.score).to be_within(0.001).of(0.9716717004776001)
       end
     end
   end
