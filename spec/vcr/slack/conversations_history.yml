@@ -1,0 +1,89 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/conversations.history
+    body:
+      encoding: UTF-8
+      string: channel=CNGCN4PC0&cursor&latest_timestamp=1571356799&limit=100&oldest_timestamp=1571270400&token=xoxp-764312300151-756042918449-751678102194-116eaae6e3ccc3b3653698c38e2a5f8f
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.14.4
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '930'
+      Connection:
+      - keep-alive
+      Date:
+      - Thu, 17 Oct 2019 13:08:52 GMT
+      Server:
+      - Apache
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - 85a62a8f9c1b38ccdb2f4d3f1656408e
+      X-Oauth-Scopes:
+      - identify,channels:history,channels:read
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Xss-Protection:
+      - '0'
+      X-Accepted-Oauth-Scopes:
+      - channels:history,groups:history,mpim:history,im:history,read
+      Vary:
+      - Accept-Encoding
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Referrer-Policy:
+      - no-referrer
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Via:
+      - haproxy-www-nhfc
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 074077f13ec7208abe18b206a740ae4d.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - ORD50-C1
+      X-Amz-Cf-Id:
+      - vyni3E10Jp8DOd3x65oACNhkuyXhn5dZvMq_3KB2dKgeSbHKXc9atw==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":true,"messages":[{"client_msg_id":"88233565-6726-4b22-bfea-240ec2a51777","type":"message","text":"program
+        starts @ 11 Am near downtown, see you around :slightly_smiling_face:","user":"UN818T0D7","ts":"1570906250.002700","team":"TNG968U4F"},{"client_msg_id":"e5c8c7fa-74a8-42d6-a02f-2a05bee0278f","type":"message","text":"This
+        is on 23rd April 2019 at Chicago with amazing drinks","user":"UN818T0D7","ts":"1570905584.002000","team":"TNG968U4F"},{"client_msg_id":"6cad2249-43f9-4e0f-a550-9d32655ca1d4","type":"message","text":"Why
+        is that i can''t take a survey?","user":"UN818T0D7","ts":"1570896513.001300","team":"TNG968U4F"},{"client_msg_id":"8afcf083-e01d-4192-9e27-c0642403af36","type":"message","text":"I
+        cant take survey","user":"UN818T0D7","ts":"1570896410.001100","team":"TNG968U4F"},{"client_msg_id":"1a081ba9-c019-4819-b3e6-657a5397800e","type":"message","text":"Why
+        is that i can''t take a survey? i want to have points","user":"UN818T0D7","ts":"1570896290.000900","team":"TNG968U4F"},{"client_msg_id":"6bd01747-bd90-430a-aded-2e01e99367b8","type":"message","text":"HI
+        Good morning, it a pleasent day","user":"UN818T0D7","ts":"1570896097.000300","team":"TNG968U4F"},{"client_msg_id":"654cec6a-6602-47ce-9f0a-57a462e480b5","type":"message","text":"Has
+        anyone else tried pouring this stuff over dry cereal? A-W-E-S-O-M-E!","user":"UN818T0D7","ts":"1570862940.000500","team":"TNG968U4F"},{"client_msg_id":"275710dd-aeb8-421a-998a-7a9644f16fc6","type":"message","text":"I
+        believe that wearing this t-shirt has made me a better man, which is remarkable
+        because, well....I''m a chick.","user":"UN818T0D7","ts":"1570860200.000300","team":"TNG968U4F"},{"client_msg_id":"a01a9164-2f21-4670-9e41-44be821a875b","type":"message","text":"I
+        need help!","user":"UN818T0D7","ts":"1568815259.000900","team":"TNG968U4F"},{"client_msg_id":"83ccb386-9e32-4d2f-9a98-e27f5daaddea","type":"message","text":"I
+        love this app.","user":"UN818T0D7","ts":"1568815246.000600","team":"TNG968U4F"},{"user":"UN818T0D7","type":"message","subtype":"channel_purpose","ts":"1568808695.000300","text":"<@UN818T0D7>
+        set the channel purpose: testing sentiments","purpose":"testing sentiments"},{"user":"UN818T0D7","type":"message","subtype":"channel_join","ts":"1568808695.000200","text":"<@UN818T0D7>
+        has joined the channel"}],"has_more":false,"pin_count":0,"channel_actions_ts":null,"channel_actions_count":0}'
+    http_version: 
+  recorded_at: Thu, 17 Oct 2019 13:08:53 GMT
+recorded_with: VCR 5.0.0

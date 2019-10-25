@@ -1,0 +1,76 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/conversations.history
+    body:
+      encoding: UTF-8
+      string: channel=invalid&cursor&latest_timestamp=1571443199&limit=100&oldest_timestamp=1571356800&token=xoxp-764312300151-756042918449-793990611233-ae23c170afa185bec0e90cf6653a7873
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.14.4
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '60'
+      Connection:
+      - keep-alive
+      Date:
+      - Fri, 18 Oct 2019 11:25:19 GMT
+      Server:
+      - Apache
+      X-Content-Type-Options:
+      - nosniff
+      X-Slack-Req-Id:
+      - 1f9726616c0c98e52f7d7885cedfdb3b
+      X-Oauth-Scopes:
+      - identify,channels:history,channels:read
+      Expires:
+      - Mon, 26 Jul 1997 05:00:00 GMT
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Access-Control-Expose-Headers:
+      - x-slack-req-id, retry-after
+      X-Xss-Protection:
+      - '0'
+      X-Accepted-Oauth-Scopes:
+      - channels:history,groups:history,mpim:history,im:history,read
+      Vary:
+      - Accept-Encoding
+      Pragma:
+      - no-cache
+      Access-Control-Allow-Headers:
+      - slack-route, x-slack-version-ts
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Referrer-Policy:
+      - no-referrer
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Via:
+      - haproxy-www-yk5c
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 851ddb32cd4fb6ca4503e357c5e6a0cd.cloudfront.net (CloudFront)
+      X-Amz-Cf-Pop:
+      - ORD52-C2
+      X-Amz-Cf-Id:
+      - KXnQEQ739o3Ng_Bqphd3xDvLcN-0o-CXDEhyBflTqS86qHMTQy9B1Q==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":false,"error":"channel_not_found"}'
+    http_version: 
+  recorded_at: Fri, 18 Oct 2019 11:25:19 GMT
+recorded_with: VCR 5.0.0
