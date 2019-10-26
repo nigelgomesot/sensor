@@ -38,7 +38,6 @@ ActiveAdmin.register Message do
           attributes_table_for message do
             row :text
             row :sent_at
-            row :created_at
             row :sentiment do |message|
               status_tag message.sentiment&.level, { class: "level_#{message.sentiment&.level}"}
             end

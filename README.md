@@ -30,7 +30,7 @@ Entities:
 message
 timestamp
 email
-catgeory
+category
 app_version
 device_model
 location
