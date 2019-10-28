@@ -28,5 +28,9 @@ ActiveAdmin.register_page "Dashboard" do
     #     end
     #   end
     # end
+
+    panel "Sentiment Distribution" do
+      pie_chart Sentiment.group(:level).count
+    end
   end # content
 end
