@@ -29,8 +29,18 @@ ActiveAdmin.register_page "Dashboard" do
     #   end
     # end
 
-    panel "Sentiment Distribution" do
-      pie_chart Sentiment.group(:level).count
+    columns do
+      column do
+        panel "Sentiment" do
+          pie_chart Sentiment.where("created_at >= ?", 1.year.ago).group(:level).count
+        end
+      end
+
+      column do
+        panel "Entities" do
+          pie_chart Entity.where("created_at >= ?", 1.year.ago).group(:text).count
+        end
+      end
     end
   end # content
 end
