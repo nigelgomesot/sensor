@@ -216,7 +216,7 @@ ActiveAdmin.setup do |config|
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
       # REF: https://spin.atomicobject.com/2016/11/23/adding-google-charts-active-admin-application/
-      config.register_javascript 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js'
+      config.register_javascript 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js'
 
   # == CSV options
   #
