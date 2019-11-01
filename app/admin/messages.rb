@@ -17,7 +17,9 @@ ActiveAdmin.register Message do
 
   actions :index, :show, :destroy
 
-  filter :sent_at
+  filter :sent_at, label: 'Sent'
+  filter :entities_category, as: :select, collection: Entity.categories, label: 'Category'
+  filter :sentiment_level, as: :select, collection: Sentiment.levels, label: 'Sentiment'
   filter :text
 
   index do
@@ -26,6 +28,9 @@ ActiveAdmin.register Message do
     column :sent_at
     column :sentiment do |message|
       status_tag message.sentiment&.level, { class: "level_#{message.sentiment&.level}"}
+    end
+    column :entities do |message|
+      message.entities&.count
     end
     column :text
     actions
