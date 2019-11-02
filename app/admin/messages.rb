@@ -19,6 +19,7 @@ ActiveAdmin.register Message do
 
   filter :sent_at, label: 'Sent'
   filter :entities_category, as: :select, collection: Entity.categories, label: 'Category'
+  filter :entities_text_cont, label: 'Category text'
   filter :sentiment_level, as: :select, collection: Sentiment.levels, label: 'Sentiment'
   filter :text
 

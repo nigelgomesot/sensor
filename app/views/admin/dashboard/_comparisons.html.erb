@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <th>TODAY</th>
+      <th>YESTERDAY</th>
+      <th>LAST WEEK</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= data[:today][:total] %> (<%= data[:today][:negative] %>)</td>
+      <td><%= data[:yesterday][:total] %> (<%= data[:yesterday][:negative] %>)</td>
+      <td><%= data[:last_week][:total] %> (<%= data[:last_week][:negative] %>)</td>
+    </tr>
+  </tbody>
+</table>
