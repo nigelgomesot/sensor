@@ -10,16 +10,16 @@ ActiveAdmin.register_page "Dashboard" do
         panel 'Comparisons' do
           data = {
             today: {
-              total: messages.count,
-              negative: messages.count,
+              total: messages.sent_today.count,
+              negative: messages.sent_today.negative.count,
             },
             yesterday: {
-              total: messages.count,
-              negative: messages.count,
+              total: messages.sent_yesterday.count,
+              negative: messages.sent_yesterday.negative.count,
             },
             last_week: {
-              total: messages.count,
-              negative: messages.count,
+              total: messages.sent_last_week.count,
+              negative: messages.sent_last_week.negative.count,
             }
           }
           render partial: 'comparisons', locals: { data: data }

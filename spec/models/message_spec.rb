@@ -71,4 +71,82 @@ RSpec.describe Message, type: :model do
       expect(message.sentiment).to be_a(Sentiment)
     end
   end
+
+  describe 'scopes' do
+    let(:message) { FactoryBot.create :message }
+
+    describe '.sent_at_date' do
+      let(:date) { Date.today - 5.days }
+      let(:other_date) { Date.today - 6.days }
+
+      it 'returns messages sent at given date' do
+        message.update_column(:sent_at, date)
+
+        expect(Message.sent_at_date(date)).to match_array([message])
+
+        message.update_column(:sent_at, other_date)
+
+        expect(Message.sent_at_date(date)).to be_empty
+      end
+    end
+
+    describe '.sent_today' do
+      let(:date) { Date.today }
+      let(:other_date) { Date.today - 1.day }
+
+      it 'returns messages sent at today' do
+        message.update_column(:sent_at, date)
+
+        expect(Message.sent_today).to match_array([message])
+
+        message.update_column(:sent_at, other_date)
+
+        expect(Message.sent_today).to be_empty
+      end
+    end
+
+    describe '.sent_yesterday' do
+      let(:date) { Date.today - 1.day }
+      let(:other_date) { Date.today - 2.day }
+
+      it 'returns messages sent at yesterday' do
+        message.update_column(:sent_at, date)
+
+        expect(Message.sent_yesterday).to match_array([message])
+
+        message.update_column(:sent_at, other_date)
+
+        expect(Message.sent_yesterday).to be_empty
+      end
+    end
+
+    describe '.sent_last_week' do
+      let(:date) { Date.today - 7.days }
+      let(:other_date) { Date.today - 8.day }
+
+      it 'returns messages sent at last week' do
+        message.update_column(:sent_at, date)
+
+        expect(Message.sent_last_week).to match_array([message])
+
+        message.update_column(:sent_at, other_date)
+
+        expect(Message.sent_last_week).to be_empty
+      end
+    end
+
+    describe '.negative' do
+      let(:sentiment) { FactoryBot.create :sentiment, message: message }
+
+      it 'returns negative sentiment messages' do
+        sentiment.update_column(:level, :negative)
+
+        expect(Message.negative).to match_array([message])
+
+        sentiment.update_column(:level, :postive)
+
+        expect(Message.negative).to be_empty
+      end
+    end
+  end
 end

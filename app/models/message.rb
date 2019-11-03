@@ -20,4 +20,12 @@ class Message < ApplicationRecord
   validates :provider_message_uid, presence: true
   validates :provider_message_uid, uniqueness: { scope: :user }
   validates :sent_at, presence: true
+
+  scope :sent_at_date, ->(date) do
+    where("sent_at >= ? and sent_at <= ?", date.beginning_of_day, date.end_of_day)
+  end
+  scope :sent_today, -> { sent_at_date(Date.today) }
+  scope :sent_yesterday, -> { sent_at_date(Date.today - 1.day) }
+  scope :sent_last_week, -> { sent_at_date(Date.today - 7.days) }
+  scope :negative, -> { joins(:sentiment).merge(Sentiment.negative) }
 end
