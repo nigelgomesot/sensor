@@ -25,11 +25,17 @@ ActiveAdmin.register_page "Dashboard" do
           render partial: 'comparisons', locals: { data: data }
 
         end
+
         panel 'Messages' do
           line_chart messages.group_by_day(:sent_at).count
         end
       end
-      column  do
+
+      column do
+        panel 'Sentiment' do
+          pie_chart Sentiment.where(message_id: messages.map(&:id)).group(:level).count(:id)
+        end
+
         panel 'Top Categories' do
           bar_chart Entity.where(message_id: messages.map(&:id)).group(:text).count(:id)
         end
