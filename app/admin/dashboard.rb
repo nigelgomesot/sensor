@@ -23,7 +23,6 @@ ActiveAdmin.register_page "Dashboard" do
             }
           }
           render partial: 'comparisons', locals: { data: data }
-
         end
 
         panel 'Messages' do
@@ -33,7 +32,16 @@ ActiveAdmin.register_page "Dashboard" do
 
       column do
         panel 'Sentiment' do
-          pie_chart Sentiment.where(message_id: messages.map(&:id)).group(:level).count(:id)
+          sentiments = Sentiment.where(message_id: messages.map(&:id))
+          total_count = sentiments.count.to_f
+          group_count = sentiments.group(:level).count
+          data = {
+            positive: ((group_count['positive'].to_f/total_count) * 100).round(2),
+            negative: ((group_count['negative'].to_f/total_count) * 100).round(2),
+            neutral:  ((group_count['neutral'].to_f/total_count) * 100).round(2),
+            mixed:    ((group_count['mixed'].to_f/total_count) * 100).round(2),
+          }
+          render partial: 'sentiments', locals: { data: data }
         end
 
         panel 'Top Categories' do
