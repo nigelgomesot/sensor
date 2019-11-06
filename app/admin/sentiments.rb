@@ -17,7 +17,7 @@ ActiveAdmin.register Sentiment do
 
   actions :index, :show
 
-  filter :level, as: :select, collection: Sentiment.levels
+  filter :level, as: :check_boxes, collection: Sentiment.levels, label: 'Sentiment'
   filter :positive_score
   filter :neutral_score
   filter :negative_score
