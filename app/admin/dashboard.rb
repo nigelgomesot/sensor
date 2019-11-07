@@ -8,18 +8,26 @@ ActiveAdmin.register_page "Dashboard" do
 
       column span: 2 do
         panel 'Comparisons' do
+          # TODO: refactor
+          today_total = messages.sent_today.count
+          yesterday_total = messages.sent_yesterday.count
+          last_week_total = messages.sent_last_week.count
+
           data = {
             today: {
-              total: messages.sent_today.count,
-              negative: messages.sent_today.negative.count,
+              total: today_total,
+              positive: ((messages.sent_today.positive.count.to_f/today_total) * 100),
+              negative: ((messages.sent_today.negative.count.to_f/today_total) * 100),
             },
             yesterday: {
-              total: messages.sent_yesterday.count,
-              negative: messages.sent_yesterday.negative.count,
+              total: yesterday_total,
+              positive: ((messages.sent_yesterday.positive.count.to_f/yesterday_total) * 100),
+              negative: ((messages.sent_yesterday.negative.count.to_f/yesterday_total) * 100),
             },
             last_week: {
-              total: messages.sent_last_week.count,
-              negative: messages.sent_last_week.negative.count,
+              total: last_week_total,
+              positive:((messages.sent_last_week.positive.count.to_f/last_week_total) * 100),
+              negative: ((messages.sent_last_week.negative.count.to_f/last_week_total) * 100),
             }
           }
           render partial: 'comparisons', locals: { data: data }
@@ -31,19 +39,6 @@ ActiveAdmin.register_page "Dashboard" do
       end
 
       column do
-        panel 'Sentiment' do
-          sentiments = Sentiment.where(message_id: messages.map(&:id))
-          total_count = sentiments.count.to_f
-          group_count = sentiments.group(:level).count
-          data = {
-            positive: ((group_count['positive'].to_f/total_count) * 100).round(2),
-            negative: ((group_count['negative'].to_f/total_count) * 100).round(2),
-            neutral:  ((group_count['neutral'].to_f/total_count) * 100).round(2),
-            mixed:    ((group_count['mixed'].to_f/total_count) * 100).round(2),
-          }
-          render partial: 'sentiments', locals: { data: data }
-        end
-
         panel 'Top Categories' do
           bar_chart Entity.where(message_id: messages.map(&:id)).group(:text).count(:id)
         end
