@@ -121,3 +121,18 @@ TOP4 SENTIMENT(%)
 
 4) Message sent_at filters (from, upto)
 
+
+
+Dashboard structure:
+Filters:
+From/Upto DateTime
+Text
+
+Sentiment donut
+messages by week(Positive, Negative)
+Top 10 Entities
+
+Count widgets:
+Total Messages
+Total Users
+
