@@ -124,15 +124,16 @@ TOP4 SENTIMENT(%)
 
 
 Dashboard structure:
-Filters:
-From/Upto DateTime
-Text
 
+DONE
 Sentiment donut
 messages by week(Positive, Negative)
 Top 10 Entities
 
+Pending
+Filters:
+From/Upto DateTime
+Text
 Count widgets:
-Total Messages
-Total Users
+Show count of messages
 
