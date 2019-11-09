@@ -3,44 +3,41 @@ ActiveAdmin.register_page "Dashboard" do
 
   content title: proc { I18n.t("active_admin.dashboard") } do
     columns do
-      # TODO: add scopes
       messages = Message.all
+      message_ids = messages.pluck(:id)
+
+      column do
+        panel 'Sentiment' do
+          sentiments = Sentiment.where(message_id: message_ids).group(:level).count
+          data = {
+            'positive' => sentiments['positive'].to_i,
+            'negative' => sentiments['negative'].to_i,
+            'neutral' => sentiments['neutral'].to_i,
+            'mixed' =>  sentiments['mixed'].to_i
+          }
+          colors = ['#00ff00', '#ff0000', '#cccccc', '#0000ff']
+
+          pie_chart data, colors: colors, donut: true
+        end
+      end
 
       column span: 2 do
-        panel 'Comparisons' do
-          # TODO: refactor
-          today_total = messages.sent_today.count
-          yesterday_total = messages.sent_yesterday.count
-          last_week_total = messages.sent_last_week.count
-
-          data = {
-            today: {
-              total: today_total,
-              positive: ((messages.sent_today.positive.count.to_f/today_total) * 100),
-              negative: ((messages.sent_today.negative.count.to_f/today_total) * 100),
-            },
-            yesterday: {
-              total: yesterday_total,
-              positive: ((messages.sent_yesterday.positive.count.to_f/yesterday_total) * 100),
-              negative: ((messages.sent_yesterday.negative.count.to_f/yesterday_total) * 100),
-            },
-            last_week: {
-              total: last_week_total,
-              positive:((messages.sent_last_week.positive.count.to_f/last_week_total) * 100),
-              negative: ((messages.sent_last_week.negative.count.to_f/last_week_total) * 100),
-            }
-          }
-          render partial: 'comparisons', locals: { data: data }
-        end
-
         panel 'Messages' do
-          line_chart messages.group_by_day(:sent_at).count
+          total_messages = messages.group_by_day(:sent_at).count
+          positive_messages = messages.positive.group_by_day(:sent_at).count
+          negative_messages = messages.negative.group_by_day(:sent_at).count
+
+          line_chart [
+            { name: :total,    data: total_messages, color: '#0000ff' },
+            { name: :positive, data: positive_messages, color: '#00ff00' },
+            { name: :negative, data: negative_messages, color: '#ff0000' }
+          ]
         end
       end
 
       column do
         panel 'Top Categories' do
-          bar_chart Entity.where(message_id: messages.map(&:id)).group(:text).count(:id)
+          bar_chart Entity.where(message_id: message_ids).group(:text).count
         end
       end
     end
