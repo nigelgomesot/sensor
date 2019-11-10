@@ -7,10 +7,10 @@ ActiveAdmin.register_page "Dashboard" do
     message_ids = messages.map(&:id)
 
     columns do
-      column span: 5 do
+      column span: 6 do
         columns do
           column do
-            panel 'Sentiment' do
+            panel 'Overall Sentiment' do
               sentiments = Sentiment.where(message_id: message_ids).group(:level).count
               data = {
                 'positive' => sentiments['positive'].to_i,
@@ -25,7 +25,7 @@ ActiveAdmin.register_page "Dashboard" do
           end
 
           column span: 2 do
-            panel 'Messages' do
+            panel 'Daily Messages' do
               total_messages = messages.group_by_day(:sent_at).count
               positive_messages = messages.positive.group_by_day(:sent_at).count
               negative_messages = messages.negative.group_by_day(:sent_at).count

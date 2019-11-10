@@ -130,10 +130,11 @@ Sentiment donut
 messages by week(Positive, Negative)
 Top 10 Entities
 
-Pending
+DONE
 Filters:
 From/Upto DateTime
 Text
-Count widgets:
-Show count of messages
 
+PENDING:
+Count widget: Show count of messages
+Link to the messages with filters
