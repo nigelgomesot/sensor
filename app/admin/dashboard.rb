@@ -47,6 +47,10 @@ ActiveAdmin.register_page "Dashboard" do
       end
 
       column do
+        panel 'Total Messages' do
+          number_with_delimiter(messages.size)
+        end
+
         panel 'Filter' do
           render partial: 'search'
         end

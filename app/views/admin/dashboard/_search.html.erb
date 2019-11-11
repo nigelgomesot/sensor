@@ -1,11 +1,11 @@
 <%= semantic_form_for :q, method: :get, action: '/admin', builder: ActiveAdmin::FormBuilder do |f| %>
   <%= f.inputs do %>
     <%= f.input :sent_at_gteq_datetime, as: :datepicker,
-      placeholder: 'Sent From',  label: false, size: "12",
+      placeholder: 'Sent From', label: false, size: "12",
       datepicker_options: { max_date: '+0D' }
     %>
     <%= f.input :sent_at_lteq_datetime, as: :datepicker,
-      placeholder: 'Sent To',  label: false, size: "12",
+      placeholder: 'Sent To', label: false, size: "12",
       datepicker_options: { max_date: '+0D' }
     %>
     <%= f.input :text_contains, placeholder: 'Text Contains', label: false %>
