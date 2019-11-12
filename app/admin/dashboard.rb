@@ -48,7 +48,13 @@ ActiveAdmin.register_page "Dashboard" do
 
       column do
         panel 'Total Messages' do
-          number_with_delimiter(messages.size)
+          strong do
+            number_with_delimiter(messages.size)
+          end
+          span do
+            params.permit!
+            link_to "(view)", admin_messages_path(params)
+          end
         end
 
         panel 'Filter' do

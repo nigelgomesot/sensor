@@ -131,7 +131,7 @@ messages by week(Positive, Negative)
 Top 10 Entities
 Filters:From/Upto DateTimeText
 Count widget: Show count of messages
+Link to the messages with filters
 
 PENDING:
-Link to the messages with filters
 Show Filters
