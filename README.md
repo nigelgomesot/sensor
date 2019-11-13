@@ -132,6 +132,7 @@ Top 10 Entities
 Filters:From/Upto DateTimeText
 Count widget: Show count of messages
 Link to the messages with filters
+Show Filters
 
 PENDING:
-Show Filters
+Heroku deployment

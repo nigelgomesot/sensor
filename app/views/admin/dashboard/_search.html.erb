@@ -1,14 +1,19 @@
 <%= semantic_form_for :q, method: :get, action: '/admin', builder: ActiveAdmin::FormBuilder do |f| %>
   <%= f.inputs do %>
     <%= f.input :sent_at_gteq_datetime, as: :datepicker,
-      placeholder: 'Sent From', label: false, size: "12",
-      datepicker_options: { max_date: '+0D' }
+      placeholder: 'Sent From', label: false, size: '12',
+      datepicker_options: { max_date: '+0D' },
+      input_html: { value: params.dig(:q, :sent_at_gteq_datetime) }
     %>
     <%= f.input :sent_at_lteq_datetime, as: :datepicker,
-      placeholder: 'Sent To', label: false, size: "12",
-      datepicker_options: { max_date: '+0D' }
+      placeholder: 'Sent To', label: false, size: '12',
+      datepicker_options: { max_date: '+0D' },
+      input_html: { value: params.dig(:q, :sent_at_lteq_datetime) }
     %>
-    <%= f.input :text_contains, placeholder: 'Text Contains', label: false %>
+    <%= f.input :text_contains,
+      placeholder: 'Text Contains', label: false, size: '12',
+      input_html: { value: params.dig(:q, :text_contains) }
+    %>
   <% end %>
   <%= f.actions do %>
     <%= f.submit 'submit' %>
