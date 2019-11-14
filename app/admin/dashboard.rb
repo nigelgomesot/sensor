@@ -67,7 +67,6 @@ ActiveAdmin.register_page "Dashboard" do
             end
             span do
               # TODO: add unique users link
-              params.permit!
               link_to "(view)", ''
             end
           end
