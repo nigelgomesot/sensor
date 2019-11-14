@@ -47,13 +47,29 @@ ActiveAdmin.register_page "Dashboard" do
       end
 
       column do
+        params.permit!
         panel 'Total Messages' do
-          strong do
-            number_with_delimiter(messages.size)
+          div do
+            strong do
+              number_with_delimiter(messages.size)
+            end
+            span do
+              link_to "(view)", admin_messages_path(params)
+            end
           end
-          span do
-            params.permit!
-            link_to "(view)", admin_messages_path(params)
+        end
+
+        panel 'Unique Users' do
+          unique_user_ids = messages.map(&:user_id).uniq
+          div do
+            strong do
+              number_with_delimiter(unique_user_ids.size)
+            end
+            span do
+              # TODO: add unique users link
+              params.permit!
+              link_to "(view)", ''
+            end
           end
         end
 
