@@ -274,6 +274,7 @@ ActiveAdmin.setup do |config|
   # You can control the default per page count for all resources here.
   #
   # config.default_per_page = 30
+  config.default_per_page = 3
   #
   # You can control the max per page count too.
   #

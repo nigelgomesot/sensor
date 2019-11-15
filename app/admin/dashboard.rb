@@ -65,10 +65,6 @@ ActiveAdmin.register_page "Dashboard" do
             strong do
               number_with_delimiter(unique_user_ids.size)
             end
-            span do
-              # TODO: add unique users link
-              link_to "(view)", ''
-            end
           end
         end
 
