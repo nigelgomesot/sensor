@@ -30,7 +30,7 @@ Entities:
 message
 timestamp
 email
-catgeory
+category
 app_version
 device_model
 location
@@ -106,3 +106,33 @@ Dashboard:
 [ ] Risk:
 	False-positives: how do we ensure Sentiment analysis is correct?
 
+
+Dashboard structure:
+1) Comparisons
+TODAY 				YESTERDAY 					LAST_WEEK
+TOP1 SENTIMENT(%) <----- only this is coloured
+TOP2 SENTIMENT(%)
+TOP3 SENTIMENT(%)
+TOP4 SENTIMENT(%)
+
+2) Messages (no change)
+
+3) Top Catgeories (Top 10 (percentages)
+
+4) Message sent_at filters (from, upto)
+
+
+
+Dashboard structure:
+
+DONE
+Sentiment donut
+messages by week(Positive, Negative)
+Top 10 Entities
+Filters:From/Upto DateTimeText
+Count widget: Show count of messages
+Link to the messages with filters
+Show Filters
+
+PENDING:
+Heroku deployment

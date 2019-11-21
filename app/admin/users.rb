@@ -19,4 +19,32 @@ ActiveAdmin.register User do
 
   filter :provider, as: :select, collection: User.providers
   filter :provider_user_uid
+
+  show do
+    columns do
+      column do
+        panel "User Details" do
+          attributes_table_for user do
+            row :provider
+            row :provider_user_uid
+            row :created_at
+            row :updated_at
+          end
+        end
+      end
+
+      column do
+        panel "Recent Messages" do
+          table_for user.messages.order(sent_at: :desc).limit(10) do
+            column :sent_at
+            column :sentiment do |message|
+              status_tag message.sentiment&.level, { class: "level_#{message.sentiment&.level}"}
+            end
+            column :text
+          end
+        end
+      end
+    end
+  end
+
 end

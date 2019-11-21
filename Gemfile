@@ -77,3 +77,7 @@ gem 'devise'
 gem 'slack-ruby-client'
 
 gem 'aws-sdk', '~> 3'
+
+gem 'chartkick'
+
+gem 'groupdate'
